@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Sphere – Professional YouTube Editing</title>
+  <meta name="description" content="Edit Sphere – Futuristic YouTube video editing and thumbnail design. Cinematic cuts, motion graphics, VFX, and performance-driven content." />
+  <style>
+    :root{
+      --bg:#000;--fg:#fff;--muted:#b7c1c7;--neon:#00ffff;--neon2:#0a84ff;--mag:#ff00ff;--card:#0e0e10;--card2:#11131a;
+      --radius:18px;--shadow:0 0 24px rgba(0,255,255,.18);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+
+    /* ===== Header / Navbar ===== */
+    header{position:fixed;inset:0 auto auto 0;width:100%;padding:14px 6vw;display:flex;align-items:center;justify-content:space-between;z-index:50;background:linear-gradient(180deg,rgba(0,0,0,.7),rgba(0,0,0,.25),transparent);backdrop-filter:saturate(140%) blur(6px);transform:translateY(-100%);animation:nav-drop .85s ease .2s forwards}
+    @keyframes nav-drop{to{transform:translateY(0)}}
+    .logo{font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--neon);text-shadow:0 0 16px rgba(0,255,255,.45)}
+    nav ul{display:flex;gap:28px;margin:0;padding:0;list-style:none}
+    nav a{position:relative;padding:8px 4px;opacity:.9}
+    nav a::after{content:"";position:absolute;left:0;bottom:-4px;height:2px;width:0;background:linear-gradient(90deg,var(--neon),var(--mag));transition:.35s}
+    nav a:hover{opacity:1}
+    nav a:hover::after{width:100%}
+
+    /* ===== Sections ===== */
+    section{padding:120px 6vw}
+    .section-title{font-size: clamp(28px, 4vw, 44px);margin:0 0 14px;text-shadow:0 0 16px rgba(0,255,255,.25)}
+    .section-sub{color:var(--muted);margin:0 0 28px;font-size:16px}
+
+    /* ===== Hero ===== */
+    #hero{position:relative;min-height:100vh;display:grid;place-items:center;text-align:center;overflow:hidden}
+    #heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+    .hero-overlay{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 10%, transparent 0%, rgba(0,0,0,.25) 60%, rgba(0,0,0,.85) 100%);z-index:1}
+    .hero-content{position:relative;z-index:2;max-width:1000px; padding-top:90px}
+
+    /* New Intro Name (big + animated) */
+    .intro-name {
+      font-size: clamp(30px, 6vw, 56px);
+      font-weight: 900;
+      margin-bottom: 14px;
+      color: var(--mag);
+      letter-spacing: .02em;
+      text-shadow: 0 0 22px rgba(255,0,255,.45);
+      animation: fadeInUp .85s ease .15s both;
+      opacity: 0;
+    }
+
+    .hero-title{font-size: clamp(44px, 8vw, 88px);margin:10px 0 12px;line-height:1.05;font-weight:1000;animation: fadeInUp 1s ease .35s both}
+    .hero-title .hl{background:linear-gradient(90deg,var(--neon),var(--mag));-webkit-background-clip:text;color:transparent}
+    .hero-lead{color:#cfd6dc;font-size: clamp(18px, 2.6vw, 24px);max-width:900px;margin:0 auto 26px;animation:fadeInUp 1s ease .55s both}
+    .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeInUp 1s ease .75s both}
+    .btn{padding:16px 24px;border-radius:999px;border:1px solid rgba(0,255,255,.45);background:rgba(0,0,0,.35);color:var(--fg);font-weight:800;cursor:pointer;transition:.25s;position:relative;overflow:hidden;font-size:16px}
+    .btn-primary{border:none;background:linear-gradient(90deg,var(--neon),var(--mag));color:#000;box-shadow:0 0 24px rgba(0,255,255,.25)}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(0,255,255,.28)}
+    .btn:active{transform:translateY(0)}
+
+    /* ===== About (bigger) ===== */
+    #about{background:linear-gradient(180deg,#0a0b0f 0%, #0b0d14 60%, #0b0b0b 100%);position:relative}
+    .about-wrap{display:grid;grid-template-columns: 1.4fr 1fr;gap:48px;align-items:center}
+    .about-text{font-size: clamp(16px,1.5vw,20px);line-height:1.9}
+    .about-bullets{display:grid;grid-template-columns: repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
+    .pill{background:rgba(0,255,255,.08);border:1px solid rgba(0,255,255,.25);padding:10px 12px;border-radius:999px;text-align:center}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+    .stat{background:var(--card2);border-radius:var(--radius);padding:18px 16px;border:1px solid rgba(0,255,255,.12);box-shadow:var(--shadow)}
+    .stat h3{margin:0;font-size:30px;color:var(--neon)}
+    .stat p{margin:6px 0 0;color:var(--muted);font-size:14px}
+    .about-visual{min-height:420px;border-radius:24px;background:radial-gradient(60% 60% at 50% 50%, rgba(0,255,255,.25) 0%, rgba(0,255,255,.05) 60%, transparent 100%);position:relative;box-shadow:0 0 60px rgba(0,255,255,.18) inset, 0 0 32px rgba(255,0,255,.12) inset}
+    .orb{position:absolute;inset:auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #fff, var(--neon));filter:blur(1px);opacity:.8;animation:float 6s ease-in-out infinite}
+    .orb:nth-child(2){top:22%;left:10%;animation-delay:-1.2s}
+    .orb:nth-child(3){bottom:14%;right:8%;animation-delay:-2.4s}
+    @keyframes float{0%,100%{transform:translateY(-6px)}50%{transform:translateY(6px)}}
+
+    /* ===== Portfolio ===== */
+    #portfolio{background:#07080b}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{background:var(--card);border-radius:16px;overflow:hidden;border:1px solid rgba(0,255,255,.12);transform:translateY(18px);opacity:0;transition:.5s cubic-bezier(.2,.65,.2,1)}
+    .card.revealed{transform:translateY(0);opacity:1}
+    .thumb{aspect-ratio:16/9;background:#0b0e12;position:relative;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+    .card:hover .thumb img{transform:scale(1.06)}
+    .tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.55);border:1px solid rgba(0,255,255,.35);padding:6px 10px;border-radius:999px;font-size:12px}
+    .card-body{padding:12px 14px 16px}
+    .card-title{margin:2px 0 6px;font-weight:700}
+    .yt-btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;border:1px solid rgba(0,255,255,.35);padding:8px 12px;border-radius:999px}
+    .yt-btn:hover{box-shadow:0 0 18px rgba(0,255,255,.25)}
+
+    /* ===== Pricing ===== */
+    #pricing{background:linear-gradient(180deg,#09090b 0%, #0c0f14 100%)}
+    .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .price{position:relative;background:var(--card2);border-radius:18px;padding:20px;border:1px solid rgba(0,255,255,.12);box-shadow:var(--shadow);transform:scale(.98);opacity:0;transition:.5s}
+    .price.revealed{opacity:1;transform:scale(1)}
+    .price.popular{outline:2px solid var(--mag)}
+    .badge{position:absolute;top:-10px;right:16px;background:var(--mag);color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}
+    .price h3{margin:0 0 6px;color:var(--neon)}
+    .price p{margin:6px 0;color:var(--muted)}
+    .price ul{margin:8px 0 0; padding-left:18px}
+
+    /* ===== Contact ===== */
+    #contact{background:#08090b}
+    .contact-row{display:flex;gap:12px;flex-wrap:wrap}
+
+    /* ===== Footer ===== */
+    footer{padding:40px 6vw;color:#8b9096;background:#07080b;border-top:1px solid rgba(0,255,255,.08)}
+
+    /* ===== Reveal animation utility ===== */
+    .reveal{opacity:0;transform:translateY(18px)}
+    .reveal.visible{opacity:1;transform:translateY(0);transition:.6s cubic-bezier(.2,.65,.2,1)}
+
+    /* Fade animation used in hero */
+    @keyframes fadeInUp {
+      from {opacity:0; transform:translateY(30px);} 
+      to {opacity:1; transform:translateY(0);} 
+    }
+
+    @media (max-width: 900px){
+      .about-wrap{grid-template-columns:1fr;gap:26px}
+      .stats{grid-template-columns:repeat(3,1fr)}
+    }
+    @media (max-width: 640px){
+      header{padding:12px 4vw}
+      section{padding:100px 5vw}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .about-bullets{grid-template-columns: repeat(2, minmax(0,1fr))}
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="logo">Edit Sphere</div>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section id="hero" aria-label="Hero">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <!-- Intro text (big + animated) -->
+      <div class="intro-name">Hey, I am Asaduzzaman</div>
+
+      <!-- Main Hero Title (bold + big) -->
+      <h1 class="hero-title">
+        <span class="hl">Professional</span> Video Editor<br>
+        And Thumbnail Designer
+      </h1>
+
+      <p class="hero-lead">Professional, performance-driven edits with color grading, motion graphics, captions, and scroll-stopping thumbnails. We craft stories that grow watch-time and subscribers.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#contact">Get Started</a>
+        <a class="btn" href="#portfolio">View Portfolio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section id="about" aria-label="About">
+    <h2 class="section-title">About Edit Sphere</h2>
+    <p class="section-sub">Story-first editing, built for creators, brands and businesses.</p>
+    <div class="about-wrap">
+      <div class="about-text">
+        <p>We combine <strong>8+ years</strong> of hands-on YouTube experience with a studio-grade workflow. From dynamic cuts and pacing to sound design and motion graphics, every detail is tuned to retention and shareability.</p>
+        <div class="about-bullets">
+          <div class="pill">Color Grading</div>
+          <div class="pill">Motion Graphics</div>
+          <div class="pill">Sound Design</div>
+          <div class="pill">YouTube Strategy</div>
+          <div class="pill">Captions/Subtitles</div>
+          <div class="pill">Thumbnail Design</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><h3 class="count" data-target="500">0</h3><p>Projects Completed</p></div>
+          <div class="stat"><h3 class="count" data-target="8">0</h3><p>Years Experience</p></div>
+          <div class="stat"><h3 class="count" data-target="100">0</h3><p>Thumbnails Created</p></div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Portfolio ===== -->
+  <section id="portfolio" aria-label="Portfolio">
+    <h2 class="section-title">Our Work</h2>
+    <p class="section-sub">A few recent edits and shorts.</p>
+    <div class="grid" id="portfolioGrid">
+      <!-- Longs -->
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/watch?v=YuHhgKUaJYI" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/YuHhgKUaJYI/hqdefault.jpg" alt="Long Video 1" />
+          <span class="tag">Long</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Long Video 1</div>
+          <a class="yt-btn" href="https://www.youtube.com/watch?v=YuHhgKUaJYI" target="_blank" rel="noopener">Watch on YouTube</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/watch?v=Mk7FjL1Tq5I" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/Mk7FjL1Tq5I/hqdefault.jpg" alt="Long Video 2" />
+          <span class="tag">Long</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Long Video 2</div>
+          <a class="yt-btn" href="https://www.youtube.com/watch?v=Mk7FjL1Tq5I" target="_blank" rel="noopener">Watch on YouTube</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/watch?v=rxT6jQ9fhFY" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/rxT6jQ9fhFY/hqdefault.jpg" alt="Long Video 3" />
+          <span class="tag">Long</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Long Video 3</div>
+          <a class="yt-btn" href="https://www.youtube.com/watch?v=rxT6jQ9fhFY" target="_blank" rel="noopener">Watch on YouTube</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/watch?v=NbrLg-WWwkI&t=12s" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/NbrLg-WWwkI/hqdefault.jpg" alt="Long Video 4" />
+          <span class="tag">Long</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Long Video 4</div>
+          <a class="yt-btn" href="https://www.youtube.com/watch?v=NbrLg-WWwkI&t=12s" target="_blank" rel="noopener">Watch on YouTube</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/watch?v=UQ1ARmPviGA" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/UQ1ARmPviGA/hqdefault.jpg" alt="Long Video 5" />
+          <span class="tag">Long</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Long Video 5</div>
+          <a class="yt-btn" href="https://www.youtube.com/watch?v=UQ1ARmPviGA" target="_blank" rel="noopener">Watch on YouTube</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/watch?v=GWR48dcw31g" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/GWR48dcw31g/hqdefault.jpg" alt="Long Video 6" />
+          <span class="tag">Long</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Long Video 6</div>
+          <a class="yt-btn" href="https://www.youtube.com/watch?v=GWR48dcw31g" target="_blank" rel="noopener">Watch on YouTube</a>
+        </div>
+      </article>
+
+      <!-- Shorts -->
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/shorts/vrDv69z9r_M" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/vrDv69z9r_M/hqdefault.jpg" alt="Short Video 1" />
+          <span class="tag">Short</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Short 1</div>
+          <a class="yt-btn" href="https://www.youtube.com/shorts/vrDv69z9r_M" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/shorts/858jvnoO1GA" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/858jvnoO1GA/hqdefault.jpg" alt="Short Video 2" />
+          <span class="tag">Short</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Short 2</div>
+          <a class="yt-btn" href="https://www.youtube.com/shorts/858jvnoO1GA" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/shorts/hlYD5ZvFUxw" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/hlYD5ZvFUxw/hqdefault.jpg" alt="Short Video 3" />
+          <span class="tag">Short</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Short 3</div>
+          <a class="yt-btn" href="https://www.youtube.com/shorts/hlYD5ZvFUxw" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/shorts/O9jfLesg7aY" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/O9jfLesg7aY/hqdefault.jpg" alt="Short Video 4" />
+          <span class="tag">Short</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Short 4</div>
+          <a class="yt-btn" href="https://www.youtube.com/shorts/O9jfLesg7aY" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/shorts/GqrDbvDgyeg" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/GqrDbvDgyeg/hqdefault.jpg" alt="Short Video 5" />
+          <span class="tag">Short</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Short 5</div>
+          <a class="yt-btn" href="https://www.youtube.com/shorts/GqrDbvDgyeg" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/shorts/filV2jEhmW8" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/filV2jEhmW8/hqdefault.jpg" alt="Short Video 6" />
+          <span class="tag">Short</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Short 6</div>
+          <a class="yt-btn" href="https://www.youtube.com/shorts/filV2jEhmW8" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <a class="thumb" href="https://www.youtube.com/shorts/R62Fz2aJKZ8" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/R62Fz2aJKZ8/hqdefault.jpg" alt="Short Video 7" />
+          <span class="tag">Short</span>
+        </a>
+        <div class="card-body">
+          <div class="card-title">Short 7</div>
+          <a class="yt-btn" href="https://www.youtube.com/shorts/R62Fz2aJKZ8" target="_blank" rel="noopener">Watch</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== Pricing ===== -->
+  <section id="pricing" aria-label="Pricing">
+    <h2 class="section-title">Professional Video Editing Packages</h2>
+    <p class="section-sub">Transparent pricing. Faster turnarounds available on request.</p>
+    <div class="price-grid">
+      <div class="price reveal">
+        <h3>Basic – $120</h3>
+        <p><strong>Video:</strong> Up to 5–7 min</p>
+        <p><strong>Thumbnail:</strong> 1</p>
+        <p><strong>Includes:</strong> Simple cuts, smooth transitions, basic color correction</p>
+        <p><strong>Revisions:</strong> 1 · <strong>Delivery:</strong> 2 days</p>
+      </div>
+      <div class="price popular reveal">
+        <span class="badge">Most Popular</span>
+        <h3>Standard – $220</h3>
+        <p><strong>Video:</strong> Up to 10–12 min</p>
+        <p><strong>Thumbnails:</strong> 2</p>
+        <p><strong>Includes:</strong> Engaging effects, text animation, captions/subtitles, color grading</p>
+        <p><strong>Revisions:</strong> 2 · <strong>Delivery:</strong> 3 days</p>
+      </div>
+      <div class="price reveal">
+        <h3>Premium – $450</h3>
+        <p><strong>Video:</strong> Up to 25–30 min</p>
+        <p><strong>Thumbnails:</strong> 5</p>
+        <ul>
+          <li>Cinematic effects, intro/outro, motion graphics, SFX</li>
+          <li>Advanced color grading, storytelling flow</li>
+          <li>Captions/subtitles</li>
+          <li>Project files (on request)</li>
+        </ul>
+        <p><strong>Revisions:</strong> 3 · <strong>Delivery:</strong> 5 days</p>
+      </div>
+    </div>
+    <p class="section-sub">Long-term/retainer plans include extra benefits. Ask us.</p>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact" aria-label="Contact">
+    <h2 class="section-title">Contact Us</h2>
+    <p class="section-sub">Email or WhatsApp — we usually reply the same day.</p>
+    <div class="contact-row">
+      <a class="btn btn-primary" href="mailto:asaduzzaman2976@gmail.com">Email: asaduzzaman2976@gmail.com</a>
+      <a class="btn" href="mailto:editingservicesagent2025@gmail.com">Email: editingservicesagent2025@gmail.com</a>
+      <a class="btn" target="_blank" rel="noopener" href="https://wa.me/8801405441664">WhatsApp: +8801405441664</a>
+      <a class="btn" target="_blank" rel="noopener" href="https://wa.me/6585454940">WhatsApp: +65 8545 4940</a>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Edit Sphere. All rights reserved.
+  </footer>
+
+  <!-- ===== Scripts ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script>
+    // ===== Smooth anchor nav =====
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{ const id=a.getAttribute('href').slice(1); const el=document.getElementById(id); if(!el) return; e.preventDefault(); el.scrollIntoView({behavior:'smooth',block:'start'}) });
+    });
+
+    // ===== Scroll reveal (portfolio + pricing) =====
+    const revealables=[...document.querySelectorAll('.reveal'),...document.querySelectorAll('.price')];
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('visible'); en.target.classList.add('revealed'); io.unobserve(en.target);} });
+    },{threshold:.18});
+    revealables.forEach(n=>io.observe(n));
+
+    // ===== Counter (About stats) triggers on view =====
+    const counters=[...document.querySelectorAll('.count')];
+    let countersStarted=false;
+    const aboutIo=new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting && !countersStarted){ countersStarted=true; counters.forEach(el=>{
+            const target=parseInt(el.dataset.target||'0',10); const t0=performance.now(); const dur=1400;
+            const step=(now)=>{ const p=Math.min(1,(now-t0)/dur); const eased=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; el.textContent=Math.floor(target*eased).toLocaleString(); if(p<1) requestAnimationFrame(step); else el.textContent=target.toLocaleString(); };
+            requestAnimationFrame(step);
+        }); aboutIo.disconnect(); }
+      });
+    },{threshold:.3});
+    aboutIo.observe(document.querySelector('#about'));
+
+    // ===== Footer year =====
+    document.getElementById('year').textContent=new Date().getFullYear();
+
+    // ===== HERO – Futuristic scene (blackhole + rings + particles + parallax) =====
+    const canvas=document.getElementById('heroCanvas');
+    const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+
+    const scene=new THREE.Scene();
+    const camera=new THREE.PerspectiveCamera(58,1,0.1,120);
+    camera.position.set(0,0,7); scene.add(camera);
+
+    // central dark core
+    const coreGeo=new THREE.SphereGeometry(1.15,64,64);
+    const coreMat=new THREE.MeshBasicMaterial({color:0x000000});
+    const core=new THREE.Mesh(coreGeo,coreMat); scene.add(core);
+
+    // neon wire sphere
+    const wire=new THREE.Mesh(new THREE.SphereGeometry(1.5,64,64), new THREE.MeshBasicMaterial({color:0x00ffff,wireframe:true,transparent:true,opacity:.35}));
+    scene.add(wire);
+
+    // accretion rings (multi)
+    const rings=new THREE.Group(); scene.add(rings);
+    for(let i=0;i<3;i++){
+      const tg=new THREE.TorusGeometry(2+i*0.35, 0.06, 16, 260);
+      const tm=new THREE.MeshBasicMaterial({color:i%2?0xff00ff:0x00ffff,wireframe:true,transparent:true,opacity:.6-i*0.15});
+      const t=new THREE.Mesh(tg,tm); t.rotation.x=Math.PI/2; t.rotation.z=i*.6; rings.add(t);
+    }
+
+    // starfield
+    const starGeo=new THREE.BufferGeometry();
+    const starCount=2200; const pos=new Float32Array(starCount*3);
+    for(let i=0;i<starCount;i++){ const r=40*Math.cbrt(Math.random()); const th=Math.random()*Math.PI*2; const ph=Math.acos(2*Math.random()-1); pos[i*3]=r*Math.sin(ph)*Math.cos(th); pos[i*3+1]=r*Math.sin(ph)*Math.sin(th); pos[i*3+2]=r*Math.cos(ph); }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+    const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xffffff,size:0.018})); scene.add(stars);
+
+    // orbiting glow dots
+    const dots=new THREE.Group(); scene.add(dots);
+    for(let i=0;i<240;i++){
+      const m=new THREE.Mesh(new THREE.SphereGeometry(0.03,8,8), new THREE.MeshBasicMaterial({color:0x89ffff}));
+      m.userData={a:Math.random()*Math.PI*2, r:2.2+Math.random()*2.2, s:0.002+Math.random()*0.003};
+      dots.add(m);
+    }
+
+    // resize
+    const fit=()=>{ const w=canvas.clientWidth||window.innerWidth; const h=canvas.clientHeight||window.innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); };
+    fit(); addEventListener('resize',fit);
+
+    // parallax by mouse
+    let mx=0,my=0; addEventListener('mousemove',e=>{ mx=(e.clientX/innerWidth-0.5); my=-(e.clientY/innerHeight-0.5); });
+
+    // animate
+    let t=0; (function loop(){ t+=0.005; requestAnimationFrame(loop);
+      wire.rotation.y+=0.0025; wire.rotation.x+=0.0012;
+      rings.children.forEach((r,i)=>{ r.rotation.z+=0.0015+(i*0.0008); });
+      stars.rotation.y+=0.0005; stars.rotation.x+=0.0002;
+      dots.children.forEach(p=>{ p.userData.a+=p.userData.s; p.position.set(Math.cos(p.userData.a)*p.userData.r, Math.sin(p.userData.a*1.1)*0.6, Math.sin(p.userData.a)*p.userData.r*0.25); });
+      camera.position.x+=((mx*1.6)-camera.position.x)*0.05; camera.position.y+=((my*1.2)-camera.position.y)*0.05; camera.lookAt(0,0,0);
+      renderer.render(scene,camera);
+    })();
+  </script>
+</body>
+</html>
